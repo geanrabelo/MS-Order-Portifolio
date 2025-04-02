@@ -8,19 +8,21 @@ import java.util.List;
 
 public class OrderEntity {
 
-    public OrderEntity(String orderId, String customerId, String email,LocalDateTime orderDate, Status status, List<OrderItemEntity> itemEntityList, BigDecimal totalAmount){
+    public OrderEntity(String orderId, String customerId, String email, BigDecimal balance, LocalDateTime orderDate, Status status, List<OrderItemEntity> itemEntityList, BigDecimal totalAmount){
         this.orderId = orderId;
         this.customerId = customerId;
         this.email = email;
+        this.balance = balance;
         this.orderDate = orderDate;
         this.status = status;
         this.items = itemEntityList;
         this.totalAmount = totalAmount;
     }
 
-    public OrderEntity(String customerId, String email, List<OrderItemEntity> orderItemEntityList){
+    public OrderEntity(String customerId, String email, BigDecimal balance, List<OrderItemEntity> orderItemEntityList){
         this.customerId = customerId;
         this.email = email;
+        this.balance = balance;
         this.items = orderItemEntityList;
         this.orderDate = LocalDateTime.now();
         this.status = Status.CREATED;
@@ -30,6 +32,7 @@ public class OrderEntity {
 
     private String orderId;
     private String customerId;
+    private BigDecimal balance;
     private String email;
     private LocalDateTime orderDate;
     private Status status;
@@ -38,6 +41,14 @@ public class OrderEntity {
 
     private BigDecimal calculatePrice(List<OrderItemEntity> orderItemEntityList){
         return orderItemEntityList.stream().map(o -> BigDecimal.valueOf(o.getQuantity()).multiply(o.getUnitPrice())).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public String getEmail() {

@@ -23,6 +23,7 @@ public class Order {
     private String orderId;
     private String customerId;
     private String email;
+    private BigDecimal balance;
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING)
     private Status status;
