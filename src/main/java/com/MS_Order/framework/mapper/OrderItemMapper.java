@@ -1,7 +1,11 @@
 package com.MS_Order.framework.mapper;
 
 import com.MS_Order.core.entity.OrderItemEntity;
+import com.MS_Order.core.enums.EnumCode;
+import com.MS_Order.core.exceptions.OrderItemIdNotFound;
+import com.MS_Order.core.usecases.OrderItemEntityUsecases;
 import com.MS_Order.framework.domain.OrderItem;
+import com.MS_Order.framework.dto.OrderItemID;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,11 +15,11 @@ import java.util.List;
 public class OrderItemMapper {
 
     public OrderItemEntity toOrderItemEntity(OrderItem orderItem){
-        return new OrderItemEntity(orderItem.getProductId(), orderItem.getQuantity(), orderItem.getUnitPrice());
+        return new OrderItemEntity(orderItem.getProductId(), orderItem.getName(),orderItem.getQuantity(), orderItem.getUnitPrice());
     }
 
     public OrderItem toOrderItem(OrderItemEntity orderItemEntity){
-        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice());
+        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getName(),orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice());
     }
 
     public List<OrderItemEntity> toListOrderItemEntity(List<OrderItem> orderItemList){

@@ -1,7 +1,9 @@
 package com.MS_Order.framework.controller;
 
 import com.MS_Order.core.entity.OrderEntity;
+import com.MS_Order.core.entity.OrderItemEntity;
 import com.MS_Order.core.usecases.OrderEntityUsecases;
+import com.MS_Order.core.usecases.OrderItemEntityUsecases;
 import com.MS_Order.framework.dto.MessageDTO;
 import com.MS_Order.framework.dto.OrderDTO;
 import com.MS_Order.framework.mapper.OrderItemMapper;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +26,9 @@ public class OrderController {
     private OrderEntityUsecases orderEntityUsecases;
 
     @Autowired
+    private OrderItemEntityUsecases orderItemEntityUsecases;
+
+    @Autowired
     private OrderItemMapper orderItemMapper;
 
     @Autowired
@@ -31,8 +37,11 @@ public class OrderController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> create(@RequestBody OrderDTO orderDTO, UriComponentsBuilder uriComponentsBuilder){
-        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(),orderItemMapper.toListOrderItemEntity(orderDTO.orderItemList()));
+        List<String> listProductId = orderDTO.orderItemIDS().stream().map(o -> o.productId()).toList();
+        orderItemEntityUsecases.checkList(listProductId);
+        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(),orderItemEntityUsecases.toList(listProductId));
         String orderId = orderEntityUsecases.create(orderEntity);
+        orderItemEntityUsecases.putOrder(orderId, listProductId);
         var uri = uriComponentsBuilder.path("/ms/order").buildAndExpand().toUri();
         Map<String, Object> eventData = new HashMap<>();
         eventData.put("eventType", "ORDER_CREATED");
@@ -40,6 +49,7 @@ public class OrderController {
         eventData.put("customerId", orderEntity.getCustomerId());
         eventData.put("email", orderEntity.getEmail());
         eventData.put("balance", orderEntity.getBalance());
+        eventData.put("method", orderEntity.getMethod());
         eventData.put("totalValue", orderEntity.getTotalAmount());
         kafkaTemplate.send("orders", eventData);
         return ResponseEntity.created(uri).body(new MessageDTO("Order created sucessfully"));

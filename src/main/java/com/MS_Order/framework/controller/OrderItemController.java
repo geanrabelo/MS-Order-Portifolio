@@ -18,7 +18,7 @@ public class OrderItemController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody OrderItemDTO orderItemDTO, UriComponentsBuilder uriComponentsBuilder){
-        OrderItemEntity orderItemEntity = new OrderItemEntity(orderItemDTO.quantity(), orderItemDTO.unitPrice());
+        OrderItemEntity orderItemEntity = new OrderItemEntity(orderItemDTO.name(), orderItemDTO.quantity(), orderItemDTO.unitPrice());
         orderItemEntityUsecases.create(orderItemEntity);
         var uri = uriComponentsBuilder.path("/ms/orderItem").buildAndExpand().toUri();
         return ResponseEntity.created(uri).body(new MessageDTO("OrderItem created sucessfully"));

@@ -24,11 +24,12 @@ public class Order {
     private String customerId;
     private String email;
     private BigDecimal balance;
+    private int method;
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItemList;
 
     private BigDecimal totalAmount;

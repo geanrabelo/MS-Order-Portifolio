@@ -12,9 +12,9 @@ public class OrderMapper {
     private OrderItemMapper orderItemMapper;
 
     public OrderEntity toOrderEntity(Order order){
-        return new OrderEntity(order.getOrderId(), order.getCustomerId(), order.getEmail(), order.getBalance(),order.getOrderDate(), order.getStatus(), orderItemMapper.toListOrderItemEntity(order.getOrderItemList()), order.getTotalAmount());
+        return new OrderEntity(order.getOrderId(), order.getCustomerId(), order.getEmail(), order.getBalance(), order.getMethod(),order.getOrderDate(), order.getStatus(), orderItemMapper.toListOrderItemEntity(order.getOrderItemList()), order.getTotalAmount());
     }
     public Order toOrder(OrderEntity orderEntity){
-        return new Order(orderEntity.getOrderId(), orderEntity.getCustomerId(), orderEntity.getEmail(), orderEntity.getBalance(),orderEntity.getOrderDate(), orderEntity.getStatus(), orderItemMapper.toListOrderItem(orderEntity.getItems()), orderEntity.getTotalAmount());
+        return new Order(orderEntity.getOrderId(), orderEntity.getCustomerId(), orderEntity.getEmail(), orderEntity.getBalance(), orderEntity.getMethod(),orderEntity.getOrderDate(), orderEntity.getStatus(), orderItemMapper.toListOrderItem(orderEntity.getItems()), orderEntity.getTotalAmount());
     }
 }

@@ -5,16 +5,28 @@ import java.math.BigDecimal;
 public class OrderItemEntity {
 
     private String productId;
+    private String name;
     private Integer quantity;
     private BigDecimal unitPrice;
+    private String orderId;
 
-    public OrderItemEntity(Integer quantity, BigDecimal unitPrice){
+    public OrderItemEntity(String name, Integer quantity, BigDecimal unitPrice){
+        this.name = name;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-    public OrderItemEntity(String productId, Integer quantity, BigDecimal unitPrice) {
+    public OrderItemEntity(String productId, String name, Integer quantity, BigDecimal unitPrice) {
         this.productId = productId;
+        this.name = name;
         this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 
@@ -26,12 +38,12 @@ public class OrderItemEntity {
         this.quantity = quantity;
     }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
+    public String getName() {
+        return name;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getProductId() {
@@ -40,5 +52,13 @@ public class OrderItemEntity {
 
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }
