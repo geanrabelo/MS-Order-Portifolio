@@ -1,6 +1,5 @@
 package com.MS_Order.framework.service;
 
-import com.MS_Order.core.entity.OrderEntity;
 import com.MS_Order.core.entity.OrderItemEntity;
 import com.MS_Order.core.enums.EnumCode;
 import com.MS_Order.core.exceptions.OrderItemIdNotFound;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderItemEntityEntityUsecasesImpl implements OrderItemEntityUsecases {
+public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
 
     @Autowired
     private OrderItemMapper orderItemMapper;
@@ -66,7 +65,8 @@ public class OrderItemEntityEntityUsecasesImpl implements OrderItemEntityUsecase
     @Override
     public void putOrder(String orderId, List<OrderItemEntity> listOrderItemEntity) {
         for(OrderItemEntity orderItemEntity : listOrderItemEntity){
-            orderItemEntity.setOrderId(orderId);
+            Order order = orderRepository.getReferenceById(orderId);
+            orderItemEntity.setOrderId(order);
             OrderItem orderItem = orderItemMapper.toOrderItemWithOrder(orderItemEntity);
             orderItemRepository.save(orderItem);
         }

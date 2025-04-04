@@ -28,7 +28,7 @@ public class OrderItemMapper {
     }
 
     public OrderItem toOrderItemWithOrder(OrderItemEntity orderItemEntity){
-        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getName(),orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice(), orderRepository.getReferenceById(orderItemEntity.getOrderId()));
+        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getName(),orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice(), orderItemEntity.getOrderId());
     }
 
 

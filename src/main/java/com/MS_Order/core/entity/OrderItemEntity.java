@@ -1,5 +1,7 @@
 package com.MS_Order.core.entity;
 
+import com.MS_Order.framework.domain.Order;
+
 import java.math.BigDecimal;
 
 public class OrderItemEntity {
@@ -8,7 +10,7 @@ public class OrderItemEntity {
     private String name;
     private Integer quantity;
     private BigDecimal unitPrice;
-    private String orderId;
+    private Order order;
 
     public OrderItemEntity(String name, Integer quantity, BigDecimal unitPrice){
         this.name = name;
@@ -54,11 +56,11 @@ public class OrderItemEntity {
         this.productId = productId;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public Order getOrderId() {
+        return order;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderId(Order order) {
+        this.order = order;
     }
 }
