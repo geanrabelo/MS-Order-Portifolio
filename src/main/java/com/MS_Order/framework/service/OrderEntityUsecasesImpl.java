@@ -12,6 +12,7 @@ import com.MS_Order.framework.dto.OrderDTO;
 import com.MS_Order.framework.mapper.OrderMapper;
 import com.MS_Order.framework.repository.OrderItemRepository;
 import com.MS_Order.framework.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class OrderEntityUsecasesImpl implements OrderEntityUsecases {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
+    @Transactional
     public String create(OrderEntity orderEntity) {
         Order order = orderMapper.toOrder(orderEntity);
         return orderRepository.save(order).getOrderId();
@@ -74,6 +76,7 @@ public class OrderEntityUsecasesImpl implements OrderEntityUsecases {
     }
 
     @Override
+    @Transactional
     public OrderEntity update(String uuid, OrderEntity newOrderEntity) {
         return null;
     }

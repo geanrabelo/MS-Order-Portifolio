@@ -1,5 +1,6 @@
 package com.MS_Order.framework.controller;
 
+import com.MS_Order.core.entity.OrderEntity;
 import com.MS_Order.framework.dto.MessageDTO;
 import com.MS_Order.framework.dto.OrderDTO;
 import com.MS_Order.framework.usecases.CreateOrderUsecases;
@@ -24,7 +25,7 @@ public class OrderController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> create(@RequestBody OrderDTO orderDTO, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<MessageDTO> create(@RequestBody OrderDTO orderDTO, UriComponentsBuilder uriComponentsBuilder){
         createOrderUsecases.createOrder(orderDTO);
         var uri = uriComponentsBuilder.path("/ms/order").buildAndExpand().toUri();
         return ResponseEntity.created(uri).body(new MessageDTO("Order created sucessfully"));
@@ -32,7 +33,7 @@ public class OrderController {
 
 
     @GetMapping
-    public ResponseEntity<?> findById(@RequestParam(value = "orderId") String orderId){
+    public ResponseEntity<OrderEntity> findById(@RequestParam(value = "orderId") String orderId){
         return ResponseEntity.ok(findOrderUsecases.findById(orderId));
     }
 }

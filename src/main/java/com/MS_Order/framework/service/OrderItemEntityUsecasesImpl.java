@@ -9,6 +9,7 @@ import com.MS_Order.framework.domain.OrderItem;
 import com.MS_Order.framework.mapper.OrderItemMapper;
 import com.MS_Order.framework.repository.OrderItemRepository;
 import com.MS_Order.framework.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
     private OrderRepository orderRepository;
 
     @Override
+    @Transactional
     public void create(OrderItemEntity orderItemEntity) {
         OrderItem orderItem = orderItemMapper.toOrderItem(orderItemEntity);
         orderItemRepository.save(orderItem);
@@ -57,12 +59,14 @@ public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
     }
 
     @Override
+    @Transactional
     public List<OrderItemEntity> toList(List<String> productIdList) {
         checkList(productIdList);
         return productIdList.stream().map(p -> findById(p)).toList();
     }
 
     @Override
+    @Transactional
     public void putOrder(String orderId, List<OrderItemEntity> listOrderItemEntity) {
         for(OrderItemEntity orderItemEntity : listOrderItemEntity){
             Order order = orderRepository.getReferenceById(orderId);
@@ -73,6 +77,7 @@ public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
     }
 
     @Override
+    @Transactional
     public OrderItemEntity update(String uuid, OrderItemEntity newOrderItemEntity) {
         return null;
     }
