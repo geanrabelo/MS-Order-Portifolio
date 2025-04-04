@@ -31,7 +31,6 @@ public class OrderEntity {
         this.totalAmount = calculatePrice(orderItemEntityList);
     }
 
-
     private String orderId;
     private String customerId;
     private BigDecimal balance;

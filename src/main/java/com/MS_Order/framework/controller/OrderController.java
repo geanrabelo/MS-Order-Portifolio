@@ -31,29 +31,24 @@ public class OrderController {
     @Autowired
     private OrderItemMapper orderItemMapper;
 
-    @Autowired
-    private KafkaTemplate<String, Object> kafkaTemplate;
-
     @PostMapping
     @Transactional
     public ResponseEntity<?> create(@RequestBody OrderDTO orderDTO, UriComponentsBuilder uriComponentsBuilder){
-        List<String> listProductId = orderDTO.orderItemIDS().stream().map(o -> o.productId()).toList();
-        orderItemEntityUsecases.checkList(listProductId);
-        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(),orderItemEntityUsecases.toList(listProductId));
+        List<OrderItemEntity> listOrderItemEntity = orderItemEntityUsecases.toList(orderDTO.productId());
+        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(), listOrderItemEntity);
         String orderId = orderEntityUsecases.create(orderEntity);
-        orderItemEntityUsecases.putOrder(orderId, listProductId);
+        orderItemEntityUsecases.putOrder(orderId, listOrderItemEntity);
+        orderEntityUsecases.createEventData(orderId, orderEntity);
         var uri = uriComponentsBuilder.path("/ms/order").buildAndExpand().toUri();
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("eventType", "ORDER_CREATED");
-        eventData.put("orderId", orderId);
-        eventData.put("customerId", orderEntity.getCustomerId());
-        eventData.put("email", orderEntity.getEmail());
-        eventData.put("balance", orderEntity.getBalance());
-        eventData.put("method", orderEntity.getMethod());
-        eventData.put("totalValue", orderEntity.getTotalAmount());
-        kafkaTemplate.send("orders", eventData);
         return ResponseEntity.created(uri).body(new MessageDTO("Order created sucessfully"));
     }
+//    private void processedCreationOrderEntity(OrderDTO orderDTO){
+//        List<OrderItemEntity> listOrderItemEntity = orderItemEntityUsecases.toList(orderDTO.productId());
+//
+//        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(), listOrderItemEntity);
+//
+//        String orderId = orderEntityUsecases.create(orderEntity);
+//    }
 
     @GetMapping
     public ResponseEntity<?> findById(@RequestParam(value = "orderId") String orderId){

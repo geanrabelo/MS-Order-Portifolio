@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "tb_orderItem")
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "productId")
@@ -28,6 +27,13 @@ public class OrderItem {
         this.name = name;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+    public OrderItem(String productId, String name, Integer quantity, BigDecimal unitPrice, Order order) {
+        this.productId = productId;
+        this.name = name;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.order = order;
     }
 
     @ManyToOne

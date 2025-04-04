@@ -64,11 +64,10 @@ public class OrderItemEntityEntityUsecasesImpl implements OrderItemEntityUsecase
     }
 
     @Override
-    public void putOrder(String orderId, List<String> listProductId) {
-        Order order = orderRepository.getReferenceById(orderId);
-        for(String productId : listProductId){
-            OrderItem orderItem = orderItemMapper.toOrderItem(findById(productId));
-            orderItem.setOrder(order);
+    public void putOrder(String orderId, List<OrderItemEntity> listOrderItemEntity) {
+        for(OrderItemEntity orderItemEntity : listOrderItemEntity){
+            orderItemEntity.setOrderId(orderId);
+            OrderItem orderItem = orderItemMapper.toOrderItemWithOrder(orderItemEntity);
             orderItemRepository.save(orderItem);
         }
     }

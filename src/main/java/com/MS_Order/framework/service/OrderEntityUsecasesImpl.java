@@ -8,13 +8,18 @@ import com.MS_Order.core.usecases.OrderEntityUsecases;
 import com.MS_Order.core.usecases.OrderItemEntityUsecases;
 import com.MS_Order.framework.domain.Order;
 import com.MS_Order.framework.domain.OrderItem;
+import com.MS_Order.framework.dto.OrderDTO;
 import com.MS_Order.framework.mapper.OrderMapper;
 import com.MS_Order.framework.repository.OrderItemRepository;
 import com.MS_Order.framework.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderEntityUsecasesImpl implements OrderEntityUsecases {
@@ -31,12 +36,27 @@ public class OrderEntityUsecasesImpl implements OrderEntityUsecases {
     @Autowired
     private OrderItemEntityUsecases orderItemEntityUsecases;
 
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
+
     @Override
     public String create(OrderEntity orderEntity) {
         Order order = orderMapper.toOrder(orderEntity);
         return orderRepository.save(order).getOrderId();
     }
 
+    @Override
+    public void createEventData(String orderId, OrderEntity orderEntity) {
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("eventType", "ORDER_CREATED");
+        eventData.put("orderId", orderId);
+        eventData.put("customerId", orderEntity.getCustomerId());
+        eventData.put("email", orderEntity.getEmail());
+        eventData.put("balance", orderEntity.getBalance());
+        eventData.put("method", orderEntity.getMethod());
+        eventData.put("totalValue", orderEntity.getTotalAmount());
+        kafkaTemplate.send("orders", eventData);
+    }
 
     @Override
     public OrderEntity findById(String uuid) {

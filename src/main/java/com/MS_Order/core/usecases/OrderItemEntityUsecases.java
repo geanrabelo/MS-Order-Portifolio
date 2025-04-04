@@ -11,6 +11,6 @@ public interface OrderItemEntityUsecases {
     boolean existsById(String uuid);
     void checkList(List<String> productIdList);
     List<OrderItemEntity> toList(List<String> productIdList);
-    void putOrder(String orderId, List<String> listProductId);
+    void putOrder(String orderId, List<OrderItemEntity> listProductId);
     OrderItemEntity update(String uuid, OrderItemEntity newOrderItemEntity);
 }
