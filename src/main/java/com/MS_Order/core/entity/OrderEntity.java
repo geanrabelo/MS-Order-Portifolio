@@ -116,4 +116,5 @@ public class OrderEntity {
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
+
 }

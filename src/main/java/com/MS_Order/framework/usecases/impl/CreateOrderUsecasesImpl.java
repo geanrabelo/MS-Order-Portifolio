@@ -34,8 +34,7 @@ public class CreateOrderUsecasesImpl implements CreateOrderUsecases {
     }
 
     private OrderEntity processedCreationOrderEntity(OrderDTO orderDTO, List<OrderItemEntity> listOrderItemEntity){
-        OrderEntity orderEntity = new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(), listOrderItemEntity);
-        return orderEntity;
+        return new OrderEntity(orderDTO.customerId(), orderDTO.email(), orderDTO.balance(), orderDTO.method(), listOrderItemEntity);
     }
 
     private void createOrderAndEventDataForKafka(OrderEntity orderEntity, List<OrderItemEntity> orderItemEntityList){
