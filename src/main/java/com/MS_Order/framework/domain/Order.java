@@ -2,10 +2,7 @@ package com.MS_Order.framework.domain;
 
 import com.MS_Order.core.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "orderId")
+@Builder(access = AccessLevel.PUBLIC)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -12,9 +12,31 @@ public class OrderMapper {
     private OrderItemMapper orderItemMapper;
 
     public OrderEntity toOrderEntity(Order order){
-        return new OrderEntity(order.getOrderId(), order.getCustomerId(), order.getEmail(), order.getBalance(), order.getMethod(),order.getOrderDate(), order.getStatus(), orderItemMapper.toListOrderItemEntity(order.getOrderItemList()), order.getTotalAmount());
+        return new OrderEntity.OrderEntityBuilder()
+                .builder()
+                .orderId(order.getOrderId())
+                .customerId(order.getCustomerId())
+                .email(order.getEmail())
+                .balance(order.getBalance())
+                .method(order.getMethod())
+                .orderDate(order.getOrderDate())
+                .status(order.getStatus())
+                .items(orderItemMapper.toListOrderItemEntity(order.getOrderItemList()))
+                .totalAmount(order.getTotalAmount())
+                .build();
     }
     public Order toOrder(OrderEntity orderEntity){
-        return new Order(orderEntity.getOrderId(), orderEntity.getCustomerId(), orderEntity.getEmail(), orderEntity.getBalance(), orderEntity.getMethod(),orderEntity.getOrderDate(), orderEntity.getStatus(), orderItemMapper.toListOrderItem(orderEntity.getItems()), orderEntity.getTotalAmount());
+        return Order
+                .builder()
+                .orderId(orderEntity.getOrderId())
+                .customerId(orderEntity.getCustomerId())
+                .email(orderEntity.getEmail())
+                .balance(orderEntity.getBalance())
+                .method(orderEntity.getMethod())
+                .orderDate(orderEntity.getOrderDate())
+                .status(orderEntity.getStatus())
+                .orderItemList(orderItemMapper.toListOrderItem(orderEntity.getItems()))
+                .totalAmount(orderEntity.getTotalAmount())
+                .build();
     }
 }

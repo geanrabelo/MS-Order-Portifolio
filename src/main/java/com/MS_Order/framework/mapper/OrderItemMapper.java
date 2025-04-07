@@ -20,15 +20,31 @@ public class OrderItemMapper {
     private OrderRepository orderRepository;
 
     public OrderItemEntity toOrderItemEntity(OrderItem orderItem){
-        return new OrderItemEntity(orderItem.getProductId(), orderItem.getName(),orderItem.getQuantity(), orderItem.getUnitPrice());
+        return new OrderItemEntity.OrderItemEntityBuilder()
+                .builder()
+                .productId(orderItem.getProductId())
+                .name(orderItem.getName())
+                .quantity(orderItem.getQuantity())
+                .unitPrice(orderItem.getUnitPrice())
+                .build();
     }
 
     public OrderItem toOrderItem(OrderItemEntity orderItemEntity){
-        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getName(),orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice());
+        return OrderItem.builder()
+                .productId(orderItemEntity.getProductId())
+                .name(orderItemEntity.getName())
+                .quantity(orderItemEntity.getQuantity())
+                .unitPrice(orderItemEntity.getUnitPrice())
+                .build();
     }
 
     public OrderItem toOrderItemWithOrder(OrderItemEntity orderItemEntity){
-        return new OrderItem(orderItemEntity.getProductId(), orderItemEntity.getName(),orderItemEntity.getQuantity(), orderItemEntity.getUnitPrice(), orderItemEntity.getOrderId());
+        return OrderItem.builder()
+                .productId(orderItemEntity.getProductId())
+                .name(orderItemEntity.getName())
+                .quantity(orderItemEntity.getQuantity())
+                .unitPrice(orderItemEntity.getUnitPrice())
+                .build();
     }
 
 

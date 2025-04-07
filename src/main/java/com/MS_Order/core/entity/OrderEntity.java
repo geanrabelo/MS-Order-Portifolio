@@ -14,10 +14,10 @@ public class OrderEntity {
         this.email = email;
         this.balance = balance;
         this.method = method;
-        this.orderDate = orderDate;
-        this.status = status;
+        this.orderDate = LocalDateTime.now();
+        this.status = Status.CREATED;
         this.items = itemEntityList;
-        this.totalAmount = totalAmount;
+        this.totalAmount = calculatePrice(itemEntityList);
     }
 
     public OrderEntity(String customerId, String email, BigDecimal balance, int method,List<OrderItemEntity> orderItemEntityList){
@@ -117,4 +117,93 @@ public class OrderEntity {
         this.totalAmount = totalAmount;
     }
 
+    public static class OrderEntityBuilder {
+
+        private String orderId;
+        private String customerId;
+        private BigDecimal balance;
+        private int method;
+        private String email;
+        private LocalDateTime orderDate;
+        private Status status;
+        private List<OrderItemEntity> items;
+        private BigDecimal totalAmount;
+
+        public OrderEntityBuilder builder(){
+            return new OrderEntityBuilder();
+        }
+
+        public OrderEntityBuilder(){
+        }
+
+        public OrderEntityBuilder(String customerId, String email, BigDecimal balance, int method) {
+            this.customerId = customerId;
+            this.email = email;
+            this.balance = balance;
+            this.method = method;
+        }
+
+        public OrderEntityBuilder(BigDecimal totalAmount, List<OrderItemEntity> items, LocalDateTime orderDate, Status status, String email, int method, String customerId, BigDecimal balance, String orderId) {
+            this.totalAmount = totalAmount;
+            this.items = items;
+            this.orderDate = orderDate;
+            this.status = status;
+            this.email = email;
+            this.method = method;
+            this.customerId = customerId;
+            this.balance = balance;
+            this.orderId = orderId;
+        }
+
+        public OrderEntityBuilder orderId(String orderId){
+            this.orderId = orderId;
+            return this;
+        }
+
+        public OrderEntityBuilder orderDate(LocalDateTime orderDate) {
+            this.orderDate = orderDate;
+            return this;
+        }
+
+
+        public OrderEntityBuilder customerId(String customerId) {
+            this.customerId = customerId;
+            return this;
+        }
+
+        public OrderEntityBuilder balance(BigDecimal balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public OrderEntityBuilder method(int method) {
+            this.method = method;
+            return this;
+        }
+
+        public OrderEntityBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public OrderEntityBuilder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public OrderEntityBuilder items(List<OrderItemEntity> items) {
+            this.items = items;
+            return this;
+        }
+
+        public OrderEntityBuilder totalAmount(BigDecimal totalAmount) {
+            this.totalAmount = totalAmount;
+            return this;
+        }
+
+
+        public OrderEntity build(){
+            return new OrderEntity(this.orderId, this.customerId, this.email, this.balance, this.method, this.orderDate, this.status, this.items, this.totalAmount);
+        }
+    }
 }

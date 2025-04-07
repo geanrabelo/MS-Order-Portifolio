@@ -1,10 +1,7 @@
 package com.MS_Order.framework.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,6 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "productId")
+@Builder
 public class OrderItem {
 
     @Id

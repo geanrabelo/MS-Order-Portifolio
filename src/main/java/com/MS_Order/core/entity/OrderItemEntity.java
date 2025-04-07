@@ -63,4 +63,47 @@ public class OrderItemEntity {
     public void setOrderId(Order order) {
         this.order = order;
     }
+
+    public static class OrderItemEntityBuilder {
+        private String productId;
+        private String name;
+        private Integer quantity;
+        private BigDecimal unitPrice;
+        private Order order;
+
+        public OrderItemEntityBuilder(){}
+
+        public OrderItemEntityBuilder builder(){
+            return new OrderItemEntityBuilder();
+        }
+
+        public OrderItemEntityBuilder productId(String productId){
+            this.productId = productId;
+            return this;
+        }
+
+        public OrderItemEntityBuilder order(Order order) {
+            this.order = order;
+            return this;
+        }
+
+        public OrderItemEntityBuilder unitPrice(BigDecimal unitPrice) {
+            this.unitPrice = unitPrice;
+            return this;
+        }
+
+        public OrderItemEntityBuilder quantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public OrderItemEntityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public OrderItemEntity build(){
+            return new OrderItemEntity(this.productId, this.name, this.quantity, this.unitPrice);
+        }
+    }
 }

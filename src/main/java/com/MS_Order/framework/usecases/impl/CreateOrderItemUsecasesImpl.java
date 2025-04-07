@@ -17,7 +17,13 @@ public class CreateOrderItemUsecasesImpl implements CreateOrderItemUsecases {
 
     @Override
     public void createOrderItem(OrderItemDTO orderItemDTO) {
-        OrderItemEntity orderItemEntity = new OrderItemEntity(orderItemDTO.name(), orderItemDTO.quantity(), orderItemDTO.unitPrice());
+        //OrderItemEntity orderItemEntity = new OrderItemEntity(orderItemDTO.name(), orderItemDTO.quantity(), orderItemDTO.unitPrice());
+        OrderItemEntity orderItemEntity = new OrderItemEntity.OrderItemEntityBuilder()
+                .builder()
+                .name(orderItemDTO.name())
+                .quantity(orderItemDTO.quantity())
+                .unitPrice(orderItemDTO.unitPrice())
+                .build();
         orderItemEntityUsecases.create(orderItemEntity);
     }
 }
