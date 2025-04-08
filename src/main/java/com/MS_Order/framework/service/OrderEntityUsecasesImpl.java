@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -70,11 +68,5 @@ public class OrderEntityUsecasesImpl implements OrderEntityUsecases {
     @Override
     public boolean existsById(String uuid) {
         return orderRepository.existsById(uuid);
-    }
-
-    @Override
-    @Transactional
-    public OrderEntity update(String uuid, OrderEntity newOrderEntity) {
-        return null;
     }
 }

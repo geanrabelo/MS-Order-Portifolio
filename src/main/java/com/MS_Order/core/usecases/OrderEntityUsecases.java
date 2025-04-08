@@ -12,5 +12,4 @@ public interface OrderEntityUsecases {
     OrderEntity findById(String uuid);
     boolean existsById(String uuid);
     void createEventData(String orderId, OrderEntity orderEntity);
-    OrderEntity update(String uuid, OrderEntity newOrderEntity);
 }

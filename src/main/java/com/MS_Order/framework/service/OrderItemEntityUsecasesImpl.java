@@ -1,5 +1,6 @@
 package com.MS_Order.framework.service;
 
+import com.MS_Order.core.entity.OrderEntity;
 import com.MS_Order.core.entity.OrderItemEntity;
 import com.MS_Order.core.enums.EnumCode;
 import com.MS_Order.core.exceptions.OrderItemIdNotFound;
@@ -7,6 +8,7 @@ import com.MS_Order.core.usecases.OrderItemEntityUsecases;
 import com.MS_Order.framework.domain.Order;
 import com.MS_Order.framework.domain.OrderItem;
 import com.MS_Order.framework.mapper.OrderItemMapper;
+import com.MS_Order.framework.mapper.OrderMapper;
 import com.MS_Order.framework.repository.OrderItemRepository;
 import com.MS_Order.framework.repository.OrderRepository;
 import jakarta.transaction.Transactional;
@@ -18,14 +20,18 @@ import java.util.List;
 @Service
 public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
 
-    @Autowired
-    private OrderItemMapper orderItemMapper;
+    private final OrderItemMapper orderItemMapper;
+    private final OrderMapper orderMapper;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderRepository orderRepository;
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
+    public OrderItemEntityUsecasesImpl(OrderItemMapper orderItemMapper, OrderMapper orderMapper, OrderItemRepository orderItemRepository, OrderRepository orderRepository){
+        this.orderItemMapper = orderItemMapper;
+        this.orderMapper = orderMapper;
+        this.orderItemRepository = orderItemRepository;
+        this.orderRepository = orderRepository;
+    }
 
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Override
     @Transactional
@@ -69,8 +75,8 @@ public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
     @Transactional
     public void putOrder(String orderId, List<OrderItemEntity> listOrderItemEntity) {
         for(OrderItemEntity orderItemEntity : listOrderItemEntity){
-            Order order = orderRepository.getReferenceById(orderId);
-            orderItemEntity.setOrderId(order);
+            OrderEntity orderEntity = orderMapper.toOrderEntity(orderRepository.getReferenceById(orderId));
+            orderItemEntity.setOrderId(orderEntity);
             OrderItem orderItem = orderItemMapper.toOrderItemWithOrder(orderItemEntity);
             orderItemRepository.save(orderItem);
         }
@@ -79,6 +85,19 @@ public class OrderItemEntityUsecasesImpl implements OrderItemEntityUsecases {
     @Override
     @Transactional
     public OrderItemEntity update(String uuid, OrderItemEntity newOrderItemEntity) {
-        return null;
+        if(existsById(uuid)){
+            if(checkinUpdate(newOrderItemEntity)){
+                OrderItem orderItem = orderItemRepository.getReferenceById(uuid);
+                orderItem.setQuantity(newOrderItemEntity.getQuantity());
+                orderItemRepository.save(orderItem);
+                return orderItemMapper.toOrderItemEntity(orderItem);
+            }else{
+                return null;
+            }
+        }
+        throw new OrderItemIdNotFound(EnumCode.ORDI0000.getMessage());
+    }
+    private boolean checkinUpdate(OrderItemEntity newOrderItemEntity){
+        return newOrderItemEntity.getQuantity() != 0;
     }
 }

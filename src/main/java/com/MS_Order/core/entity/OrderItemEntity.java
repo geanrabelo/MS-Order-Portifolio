@@ -1,6 +1,6 @@
 package com.MS_Order.core.entity;
 
-import com.MS_Order.framework.domain.Order;
+import com.MS_Order.framework.domain.OrderItem;
 
 import java.math.BigDecimal;
 
@@ -10,7 +10,7 @@ public class OrderItemEntity {
     private String name;
     private Integer quantity;
     private BigDecimal unitPrice;
-    private Order order;
+    private OrderEntity orderEntity;
 
     public OrderItemEntity(String name, Integer quantity, BigDecimal unitPrice){
         this.name = name;
@@ -22,6 +22,16 @@ public class OrderItemEntity {
         this.name = name;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+    public OrderItemEntity(String productId, String name, Integer quantity, BigDecimal unitPrice, OrderEntity orderEntity) {
+        this.productId = productId;
+        this.name = name;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.orderEntity = orderEntity;
+    }
+    public OrderItemEntity(int quantity){
+        this.quantity = quantity;
     }
 
     public BigDecimal getUnitPrice() {
@@ -56,12 +66,12 @@ public class OrderItemEntity {
         this.productId = productId;
     }
 
-    public Order getOrderId() {
-        return order;
+    public OrderEntity getOrderId() {
+        return orderEntity;
     }
 
-    public void setOrderId(Order order) {
-        this.order = order;
+    public void setOrderId(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
     }
 
     public static class OrderItemEntityBuilder {
@@ -69,7 +79,7 @@ public class OrderItemEntity {
         private String name;
         private Integer quantity;
         private BigDecimal unitPrice;
-        private Order order;
+        private OrderEntity orderEntity;
 
         public OrderItemEntityBuilder(){}
 
@@ -82,8 +92,8 @@ public class OrderItemEntity {
             return this;
         }
 
-        public OrderItemEntityBuilder order(Order order) {
-            this.order = order;
+        public OrderItemEntityBuilder orderItemEntity(OrderEntity orderEntity) {
+            this.orderEntity = orderEntity;
             return this;
         }
 
@@ -103,7 +113,7 @@ public class OrderItemEntity {
         }
 
         public OrderItemEntity build(){
-            return new OrderItemEntity(this.productId, this.name, this.quantity, this.unitPrice);
+            return new OrderItemEntity(this.productId, this.name, this.quantity, this.unitPrice, this.orderEntity);
         }
     }
 }
